@@ -13,27 +13,19 @@
   --accent: #7cc4ff;
   --accent-2: #9cffd0;
 }
-[data-theme="light"] {
-  --bg: #f7f9ff;
-  --panel: #ffffff;
-  --text: #0e1b2e;
-  --muted: #54627a;
-  --accent: #2563eb;
-  --accent-2: #059669;
-}
 body {
-  margin: 0;
+  margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial;
   background: radial-gradient(1200px 600px at 50% -10%, rgba(124,196,255,.15), transparent), var(--bg);
   color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:20px;
 }
-h1 { margin: 0 0 20px; text-align:center; font-size:2rem; }
+h1 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .card {
   background: var(--panel);
   border-radius: 18px;
@@ -42,35 +34,49 @@ h1 { margin: 0 0 20px; text-align:center; font-size:2rem; }
   margin-bottom: 20px;
   width: 100%;
   max-width: 500px;
-}
-.breath {
-  display: flex; flex-direction: column; align-items: center;
+  text-align:center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .circle {
   width: 250px; height: 250px;
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 60%),
-              radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent-2) 35%, transparent), transparent 70%),
-              linear-gradient(180deg, color-mix(in srgb, var(--panel) 96%, transparent), var(--panel));
-  border: 2px solid color-mix(in srgb, var(--accent) 35%, var(--panel));
+  background: radial-gradient(circle at 50% 40%, #7cc4ff 45%, transparent 60%);
+  border: 0px solid #7cc4ff;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items:center;
+  justify-content:center;
+  font-size:3rem;
+  font-weight:700;
+  margin-bottom: 15px;
   transition: transform 1s ease-in-out, background 1s ease-in-out;
-  margin-bottom: 20px;
 }
-.phase { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
-.count { font-size: 3rem; font-weight: 700; }
-label { font-weight: 600; margin-top: 10px; display:block; }
-input[type="number"], select {
-  width: 100%; padding: 8px 10px; margin-top:5px;
-  border-radius: 12px; border: 1px solid color-mix(in srgb, var(--panel), #fff 12%);
-  background: var(--panel); color: var(--text); font-weight:600;
+#mensaje {
+  margin-bottom: 20px;
+  font-size:1.2rem;
+}
+.grid-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px 20px; /* más espacio entre inputs */
+  margin-top:10px;
+}
+.grid-inputs label, .grid-inputs input {
+  width: 100%;
+  font-weight:600;
+}
+.grid-inputs input {
+  width: 80%; /* achica los inputs */
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid #fff3;
+  background: var(--panel);
+  color: var(--text);
 }
 button {
-  margin-top: 15px;
-  padding: 10px 20px;
+  margin-top:15px;
+  padding:10px 20px;
   font-weight:600;
   border:none;
   border-radius:12px;
@@ -79,108 +85,106 @@ button {
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
 }
 button:hover { opacity:0.9; }
-#mensaje { text-align:center; margin-top:10px; font-size:1.1rem; }
 .author { position: fixed; bottom: 10px; right: 15px; font-size:0.9rem; color: var(--muted); }
 </style>
 </head>
-<body data-theme="dark">
+<body>
 
 <h1>Respiración Diafragmática Guiada</h1>
 
-<div class="card breath">
-  <div id="circle" class="circle">
-    <div class="phase" id="phase">Preparado</div>
-    <div class="count" id="count">0</div>
-  </div>
-
-  <div class="panel">
-    <label for="inhale">Segundos inhalar:</label>
-    <input type="number" id="inhale" value="4" min="1">
-    <label for="hold">Segundos mantener:</label>
-    <input type="number" id="hold" value="4" min="0">
-    <label for="exhale">Segundos exhalar:</label>
-    <input type="number" id="exhale" value="4" min="1">
-    <label for="hold2">Segundos mantener después de exhalar:</label>
-    <input type="number" id="hold2" value="4" min="0">
-
-    <button onclick="startBreathing()">Iniciar</button>
-    <button onclick="resetBreathing()">Reiniciar</button>
-  </div>
+<div class="card">
+  <div id="circle" class="circle">0</div>
 
   <div id="mensaje">Sigue las instrucciones y respira tranquilamente.</div>
+
+  <div class="grid-inputs">
+    <div>
+      <label for="inhale">Segundos inhalar:</label>
+      <input type="number" id="inhale" value="4" min="1">
+    </div>
+    <div>
+      <label for="hold">Segundos mantener:</label>
+      <input type="number" id="hold" value="4" min="0">
+    </div>
+    <div>
+      <label for="exhale">Segundos exhalar:</label>
+      <input type="number" id="exhale" value="4" min="1">
+    </div>
+    <div>
+      <label for="hold2">Segundos mantener:</label>
+      <input type="number" id="hold2" value="4" min="0">
+    </div>
+  </div>
+
+  <button onclick="startBreathing()">Iniciar</button>
+  <button onclick="resetBreathing()">Reiniciar</button>
 </div>
 
 <div class="author">Autoría Jésica Favara</div>
 
 <script>
-let phases = ["Inhalar", "Mantener", "Exhalar", "Mantener"];
-let times = [];
-let phaseIndex = 0;
-let remaining = 0;
-let interval = null;
+let phases = ["Inhalar","Mantener","Exhalar","Mantener"];
+let times=[];
+let phaseIndex=0;
+let remaining=0;
+let interval=null;
 
-let messages = {
-  "Inhalar": "Llena tus pulmones de aire y calma tu mente",
-  "Mantener": "Siente la energía dentro, mantén la atención en tu respiración",
-  "Exhalar": "Suelta el aire y deja ir la tensión",
-  "Mantener": "Relájate y prepárate para la siguiente respiración"
+let messages={
+  "Inhalar":"Llena tus pulmones de aire y calma tu mente",
+  "Mantener":"Siente la energía dentro, mantén la atención en tu respiración",
+  "Exhalar":"Suelta el aire y deja ir la tensión",
+  "Mantener":"Relájate y prepárate para la siguiente respiración"
 };
 
 function startBreathing(){
-  times = [
+  times=[
     parseInt(document.getElementById("inhale").value),
     parseInt(document.getElementById("hold").value),
     parseInt(document.getElementById("exhale").value),
     parseInt(document.getElementById("hold2").value)
   ];
-  phaseIndex = 0;
-  remaining = times[phaseIndex];
+  phaseIndex=0;
+  remaining=times[phaseIndex];
   updatePhase();
 
   clearInterval(interval);
-  interval = setInterval(()=>{
+  interval=setInterval(()=>{
     remaining--;
-    document.getElementById("count").textContent = remaining;
-    if(remaining <=0){
-      phaseIndex = (phaseIndex + 1) % phases.length;
-      remaining = times[phaseIndex];
+    document.getElementById("circle").textContent=remaining;
+    if(remaining<=0){
+      phaseIndex=(phaseIndex+1)%phases.length;
+      remaining=times[phaseIndex];
       updatePhase();
     }
   },1000);
 }
 
 function updatePhase(){
-  const phaseName = phases[phaseIndex];
-  document.getElementById("phase").textContent = phaseName;
-  document.getElementById("mensaje").textContent = messages[phaseName];
-
-  const circle = document.getElementById("circle");
+  const phaseName=phases[phaseIndex];
+  document.getElementById("mensaje").textContent=messages[phaseName];
+  
+  const circle=document.getElementById("circle");
   switch(phaseName){
     case "Inhalar":
-      circle.style.transform = "scale(1.5)";
-      circle.style.background = "radial-gradient(circle at 50% 40%, #7cc4ff 45%, transparent 60%), radial-gradient(circle at 50% 50%, #9cffd0 35%, transparent 70%)";
+      circle.style.transform="scale(1.5)";
+      circle.style.background="radial-gradient(circle at 50% 40%, #7cc4ff 45%, transparent 60%)";
       break;
     case "Mantener":
-      circle.style.transform = "scale(1.5)";
-      circle.style.background = "radial-gradient(circle at 50% 40%, #ffb74d 45%, transparent 60%), radial-gradient(circle at 50% 50%, #ffd180 35%, transparent 70%)";
+      circle.style.transform="scale(1.5)";
+      circle.style.background="radial-gradient(circle at 50% 40%, #ffb74d 45%, transparent 60%)";
       break;
     case "Exhalar":
-      circle.style.transform = "scale(1)";
-      circle.style.background = "radial-gradient(circle at 50% 40%, #4caf50 45%, transparent 60%), radial-gradient(circle at 50% 50%, #81c784 35%, transparent 70%)";
-      break;
-    case "Mantener":
-      circle.style.transform = "scale(1)";
-      circle.style.background = "radial-gradient(circle at 50% 40%, #81d4fa 45%, transparent 60%), radial-gradient(circle at 50% 50%, #b2ebf2 35%, transparent 70%)";
+      circle.style.transform="scale(1)";
+      circle.style.background="radial-gradient(circle at 50% 40%, #4caf50 45%, transparent 60%)";
       break;
   }
 }
 
 function resetBreathing(){
   clearInterval(interval);
-  document.getElementById("phase").textContent = "Preparado";
-  document.getElementById("count").textContent = "0";
-  document.getElementById("mensaje").textContent = "Sigue las instrucciones y respira tranquilamente.";
-  document.getElementById("circle").style.transform = "scale(1)";
+  document.getElementById("circle").textContent="0";
+  document.getElementById("mensaje").textContent="Sigue las instrucciones y respira tranquilamente.";
+  document.getElementById("circle").style.transform="scale(1)";
 }
 </script>
 
