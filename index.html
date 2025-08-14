@@ -43,7 +43,6 @@ h1 { text-align:center; margin-bottom:20px; font-size:2rem; }
   width: 250px; height: 250px;
   border-radius: 50%;
   background: radial-gradient(circle at 50% 40%, #7cc4ff 45%, transparent 60%);
-  border: 0px solid #7cc4ff;
   display: flex;
   align-items:center;
   justify-content:center;
@@ -59,7 +58,7 @@ h1 { text-align:center; margin-bottom:20px; font-size:2rem; }
 .grid-inputs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px 20px; /* más espacio entre inputs */
+  gap: 15px 20px;
   margin-top:10px;
 }
 .grid-inputs label, .grid-inputs input {
@@ -67,7 +66,7 @@ h1 { text-align:center; margin-bottom:20px; font-size:2rem; }
   font-weight:600;
 }
 .grid-inputs input {
-  width: 80%; /* achica los inputs */
+  width: 80%;
   padding:8px 10px;
   border-radius:12px;
   border:1px solid #fff3;
@@ -86,11 +85,28 @@ button {
 }
 button:hover { opacity:0.9; }
 .author { position: fixed; bottom: 10px; right: 15px; font-size:0.9rem; color: var(--muted); }
+.lang-btn {
+  position: fixed;
+  top: 10px;
+  left: 15px;
+  background: transparent;
+  border: 1px solid var(--muted);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.lang-btn:hover {
+  background: rgba(255,255,255,0.05);
+}
 </style>
 </head>
 <body>
 
-<h1>Respiración Diafragmática Guiada</h1>
+<button class="lang-btn" onclick="toggleLanguage()">ES</button>
+
+<h1 id="title">Respiración Diafragmática Guiada</h1>
 
 <div class="card">
   <div id="circle" class="circle">0</div>
@@ -99,42 +115,79 @@ button:hover { opacity:0.9; }
 
   <div class="grid-inputs">
     <div>
-      <label for="inhale">Segundos inhalar:</label>
+      <label id="labelInhale" for="inhale">Segundos inhalar:</label>
       <input type="number" id="inhale" value="4" min="1">
     </div>
     <div>
-      <label for="hold">Segundos mantener:</label>
+      <label id="labelHold1" for="hold">Segundos mantener:</label>
       <input type="number" id="hold" value="4" min="0">
     </div>
     <div>
-      <label for="exhale">Segundos exhalar:</label>
+      <label id="labelExhale" for="exhale">Segundos exhalar:</label>
       <input type="number" id="exhale" value="4" min="1">
     </div>
     <div>
-      <label for="hold2">Segundos mantener:</label>
+      <label id="labelHold2" for="hold2">Segundos mantener:</label>
       <input type="number" id="hold2" value="4" min="0">
     </div>
   </div>
 
-  <button onclick="startBreathing()">Iniciar</button>
-  <button onclick="resetBreathing()">Reiniciar</button>
+  <button id="btnStart" onclick="startBreathing()">Iniciar</button>
+  <button id="btnReset" onclick="resetBreathing()">Reiniciar</button>
 </div>
 
 <div class="author">Autoría Jésica Favara</div>
 
 <script>
+let lang = "es";
+
+const texts = {
+  es: {
+    title: "Respiración Diafragmática Guiada",
+    start: "Iniciar",
+    reset: "Reiniciar",
+    labels: ["Segundos inhalar:", "Segundos mantener:", "Segundos exhalar:", "Segundos mantener:"],
+    messages: {
+      "Inhalar": "Llena tus pulmones de aire y calma tu mente",
+      "Mantener": "Siente la energía dentro, mantén la atención en tu respiración",
+      "Exhalar": "Suelta el aire y deja ir la tensión"
+    },
+    initialMsg: "Sigue las instrucciones y respira tranquilamente."
+  },
+  en: {
+    title: "Guided Diaphragmatic Breathing",
+    start: "Start",
+    reset: "Reset",
+    labels: ["Inhale seconds:", "Hold seconds:", "Exhale seconds:", "Hold seconds:"],
+    messages: {
+      "Inhalar": "Fill your lungs with air and calm your mind",
+      "Mantener": "Feel the energy inside, keep your focus on your breath",
+      "Exhalar": "Release the air and let go of tension"
+    },
+    initialMsg: "Follow the instructions and breathe calmly."
+  }
+};
+
 let phases = ["Inhalar","Mantener","Exhalar","Mantener"];
 let times=[];
 let phaseIndex=0;
 let remaining=0;
 let interval=null;
 
-let messages={
-  "Inhalar":"Llena tus pulmones de aire y calma tu mente",
-  "Mantener":"Siente la energía dentro, mantén la atención en tu respiración",
-  "Exhalar":"Suelta el aire y deja ir la tensión",
-  "Mantener":"Relájate y prepárate para la siguiente respiración"
-};
+function toggleLanguage(){
+  lang = (lang === "es") ? "en" : "es";
+  document.querySelector(".lang-btn").textContent = lang.toUpperCase();
+
+  const t = texts[lang];
+  document.getElementById("title").textContent = t.title;
+  document.getElementById("btnStart").textContent = t.start;
+  document.getElementById("btnReset").textContent = t.reset;
+  document.getElementById("labelInhale").textContent = t.labels[0];
+  document.getElementById("labelHold1").textContent = t.labels[1];
+  document.getElementById("labelExhale").textContent = t.labels[2];
+  document.getElementById("labelHold2").textContent = t.labels[3];
+  document.getElementById("mensaje").textContent = t.initialMsg;
+}
 
 function startBreathing(){
   times=[
@@ -161,7 +214,7 @@ function startBreathing(){
 
 function updatePhase(){
   const phaseName=phases[phaseIndex];
-  document.getElementById("mensaje").textContent=messages[phaseName];
+  document.getElementById("mensaje").textContent=texts[lang].messages[phaseName];
   
   const circle=document.getElementById("circle");
   switch(phaseName){
@@ -183,7 +236,7 @@ function updatePhase(){
 function resetBreathing(){
   clearInterval(interval);
   document.getElementById("circle").textContent="0";
-  document.getElementById("mensaje").textContent="Sigue las instrucciones y respira tranquilamente.";
+  document.getElementById("mensaje").textContent=texts[lang].initialMsg;
   document.getElementById("circle").style.transform="scale(1)";
 }
 </script>
