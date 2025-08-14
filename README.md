@@ -17,13 +17,6 @@ Esta es una **herramienta web simple para ayudar a regular la ansiedad** mediant
 2. Ajustar los tiempos de respiración según tu preferencia.
 3. Presionar **Iniciar** para comenzar la guía de respiración.
 4. Presionar **Reiniciar** para volver al estado inicial.
-
-## Subir a GitHub
-
-1. Crear un repositorio nuevo.
-2. Subir `index.html` y `README.md`.
-3. Listo, ya podés compartir la URL del repositorio o usar GitHub Pages.
-
 ---
 
 **Nota:** Esta herramienta es un apoyo para la relajación y no reemplaza atención profesional.
