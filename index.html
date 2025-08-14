@@ -40,16 +40,28 @@ h1 { text-align:center; margin-bottom:20px; font-size:2rem; }
   align-items: center;
 }
 .circle {
-  width: 250px; height: 250px;
+  width: 250px; 
+  height: 250px;
   border-radius: 50%;
   background: radial-gradient(circle at 50% 40%, #7cc4ff 45%, transparent 60%);
   display: flex;
-  align-items:center;
-  justify-content:center;
-  font-size:3rem;
-  font-weight:700;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
   margin-bottom: 15px;
   transition: transform 1s ease-in-out, background 1s ease-in-out;
+}
+.circle-phase {
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+.circle-number {
+  font-size: 3rem;
+  margin-top: 5px;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 #mensaje {
   margin-bottom: 20px;
@@ -109,7 +121,10 @@ button:hover { opacity:0.9; }
 <h1 id="title">Respiración Diafragmática Guiada</h1>
 
 <div class="card">
-  <div id="circle" class="circle">0</div>
+  <div id="circle" class="circle">
+    <div class="circle-phase" id="circlePhase"></div>
+    <div class="circle-number" id="circleNumber">0</div>
+  </div>
 
   <div id="mensaje">Sigue las instrucciones y respira tranquilamente.</div>
 
@@ -203,7 +218,7 @@ function startBreathing(){
   clearInterval(interval);
   interval=setInterval(()=>{
     remaining--;
-    document.getElementById("circle").textContent=remaining;
+    document.getElementById("circleNumber").textContent = remaining;
     if(remaining<=0){
       phaseIndex=(phaseIndex+1)%phases.length;
       remaining=times[phaseIndex];
@@ -215,7 +230,9 @@ function startBreathing(){
 function updatePhase(){
   const phaseName=phases[phaseIndex];
   document.getElementById("mensaje").textContent=texts[lang].messages[phaseName];
-  
+  document.getElementById("circlePhase").textContent = phaseName;
+  document.getElementById("circleNumber").textContent = remaining;
+
   const circle=document.getElementById("circle");
   switch(phaseName){
     case "Inhalar":
@@ -235,8 +252,9 @@ function updatePhase(){
 
 function resetBreathing(){
   clearInterval(interval);
-  document.getElementById("circle").textContent="0";
-  document.getElementById("mensaje").textContent=texts[lang].initialMsg;
+  document.getElementById("circlePhase").textContent = "";
+  document.getElementById("circleNumber").textContent = "0";
+  document.getElementById("mensaje").textContent = texts[lang].initialMsg;
   document.getElementById("circle").style.transform="scale(1)";
 }
 </script>
